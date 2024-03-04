@@ -22,4 +22,9 @@ internal class AppConfig
     {
         return _iconfiguration.GetConnectionString("Default");
     }
+
+    public static string GetDbConnectionString()
+    {
+        return _iconfiguration.GetConnectionString("Flashcards");
+    }
 }

@@ -1,2 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿using FlashcardsLibrary;
+
+var database = new DatabaseManager();
+database.CreateDatabase();
+database.CreateTables();
