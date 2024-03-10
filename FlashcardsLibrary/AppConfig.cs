@@ -3,7 +3,7 @@
 namespace FlashcardsLibrary;
 internal class AppConfig
 {
-    private static IConfiguration _iconfiguration;
+    private static IConfiguration? _iconfiguration;
 
     static AppConfig()
     {
@@ -18,13 +18,13 @@ internal class AppConfig
         _iconfiguration = builder.Build();
     }
 
-    public static string GetConnectionString()
-    {
-        return _iconfiguration.GetConnectionString("Default");
-    }
-
     public static string GetDbConnectionString()
     {
-        return _iconfiguration.GetConnectionString("Flashcards");
+        return _iconfiguration?.GetConnectionString("Default") ?? throw new Exception("Connection string error!");
+    }
+
+    public static string GetFullConnectionString()
+    {
+        return _iconfiguration?.GetConnectionString("Flashcards") ?? throw new Exception("Connection string error!");
     }
 }

@@ -5,20 +5,20 @@ using Spectre.Console;
 namespace FlashcardsLibrary;
 public class DatabaseManager
 {
-    private string connectionString;
-    private string connectionStringDb;
+    private string? connectionString;
+    private string? connectionStringDb;
 
     public DatabaseManager()
     {
-        connectionString = AppConfig.GetConnectionString();
-        connectionStringDb = AppConfig.GetDbConnectionString();
+        connectionString = AppConfig.GetDbConnectionString();
+        connectionString = AppConfig.GetFullConnectionString();
     }
 
     public void CreateDatabase()
     {
         try
         {
-            using (var connection = new SqlConnection(connectionString))
+            using (var connection = new SqlConnection(connectionStringDb))
             {
                 connection.Open();
                 var createDatabaseSql = @"IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'FlashcardsDb')
@@ -37,7 +37,7 @@ public class DatabaseManager
     {
         try
         {
-            using (var connection = new SqlConnection(connectionStringDb))
+            using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
                 var createStackSql = @"IF NOT EXISTS (SELECT name FROM sys.tables WHERE name = 'Stack')
