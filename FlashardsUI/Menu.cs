@@ -1,35 +1,29 @@
-﻿using Spectre.Console;
+﻿using FlashcardsLibrary.Repositories;
+using Spectre.Console;
 using static FlashardsUI.Enums;
 
 namespace FlashardsUI;
 internal class Menu
 {
+    StacksController stacksController = new(new StacksRepository());
+
     internal void MainMenu()
     {
-        bool repeat = true;
-        while (repeat)
-        {
-            Console.Clear();
-            repeat = false;
+        var exit = false;
 
-            var selection = AnsiConsole.Prompt(
-                new SelectionPrompt<MainMenuOptions>()
-                .Title("Welcome to the [green]Flashcards[/] application\nWhat would you like to do?")
-                .PageSize(10)
-                .AddChoices(MainMenuOptions.ManageStacks,
-                            MainMenuOptions.ManageFlashcards,
-                            MainMenuOptions.StudySessions,
-                            MainMenuOptions.CloseApplication));
+        while (!exit)
+        {
+            AnsiConsole.Clear();
+
+            var selection = UserInput.EnumPrompt<MainMenuOptions>("Welcome to flashcards application!\nWhat would you like to do?");
 
             switch (selection)
             {
                 case MainMenuOptions.ManageStacks:
                     StacksMenu();
-                    MainMenu();
                     break;
                 case MainMenuOptions.ManageFlashcards:
                     FlashcardsMenu();
-                    MainMenu();
                     break;
                 case MainMenuOptions.StudySessions:
                     break;
@@ -37,10 +31,11 @@ internal class Menu
                     if (AnsiConsole.Confirm("Are you sure you want to exit?"))
                     {
                         Console.WriteLine("\nGoodbye!");
+                        exit = true;
                     }
                     else
                     {
-                        repeat = true;
+                        exit = false;
                     }
                     break;
             }
@@ -49,33 +44,30 @@ internal class Menu
 
     internal void StacksMenu()
     {
-        bool repeat = true;
-        while (repeat)
+        var exit = false;
+
+        while (!exit)
         {
             Console.Clear();
 
-            var selection = AnsiConsole.Prompt(
-                new SelectionPrompt<StacksMenuOptions>()
-                .Title("Manage stacks of flashcards\nSelect from the options")
-                .PageSize(10)
-                .AddChoices(StacksMenuOptions.ViewAllStacks,
-                            StacksMenuOptions.AddStack,
-                            StacksMenuOptions.DeleteStack,
-                            StacksMenuOptions.UpdateStack,
-                            StacksMenuOptions.MainMenu));
+            var selection = UserInput.EnumPrompt<StacksMenuOptions>("Manage stacks of flashcards\nSelect from the options");
 
             switch (selection)
             {
                 case StacksMenuOptions.ViewAllStacks:
+                    stacksController.GetAll();
                     break;
                 case StacksMenuOptions.AddStack:
+                    stacksController.Post();
                     break;
                 case StacksMenuOptions.DeleteStack:
+                    stacksController.Delete();
                     break;
                 case StacksMenuOptions.UpdateStack:
+                    stacksController.Update();
                     break;
                 case StacksMenuOptions.MainMenu:
-                    repeat = false;
+                    exit = true;
                     break;
             }
         }
@@ -83,20 +75,13 @@ internal class Menu
 
     internal void FlashcardsMenu()
     {
-        bool repeat = true;
-        while (repeat)
+        var exit = false;
+
+        while (!exit)
         {
             Console.Clear();
 
-            var selection = AnsiConsole.Prompt(
-                new SelectionPrompt<FlashcardsMenuOptions>()
-                .Title("Manage stacks of flashcards\nSelect from the options")
-                .PageSize(10)
-                .AddChoices(FlashcardsMenuOptions.ViewAllFlashcards,
-                            FlashcardsMenuOptions.AddFlashcard,
-                            FlashcardsMenuOptions.DeleteFlashcard,
-                            FlashcardsMenuOptions.UpdateFlashcard,
-                            FlashcardsMenuOptions.MainMenu));
+            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>("Manage flashcards\nSelect from the options");
 
             switch (selection)
             {
@@ -109,7 +94,7 @@ internal class Menu
                 case FlashcardsMenuOptions.UpdateFlashcard:
                     break;
                 case FlashcardsMenuOptions.MainMenu:
-                    repeat = false;
+                    exit = true;
                     break;
             }
         }

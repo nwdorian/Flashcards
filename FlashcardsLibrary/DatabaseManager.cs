@@ -5,12 +5,12 @@ using Spectre.Console;
 namespace FlashcardsLibrary;
 public class DatabaseManager
 {
-    private string? connectionString;
     private string? connectionStringDb;
+    private string? connectionString;
 
     public DatabaseManager()
     {
-        connectionString = AppConfig.GetDbConnectionString();
+        connectionStringDb = AppConfig.GetDbConnectionString();
         connectionString = AppConfig.GetFullConnectionString();
     }
 
