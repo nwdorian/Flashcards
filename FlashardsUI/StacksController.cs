@@ -34,20 +34,21 @@ internal class StacksController
 
         while (_stacksRepository.StackNameExists(name.Trim()))
         {
-            name = UserInput.StringPrompt($"Stack with the name {name} already exists! \n\nEnter stack name (or press 0 to cancel):");
+            Console.Clear();
+            name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! \n\nEnter stack name (or press 0 to cancel):");
         }
 
-        if (name == "0")
+        if (name.Trim() == "0")
         {
             return;
         }
 
         _stacksRepository.Add(new Stack
         {
-            Name = name
+            Name = name.Trim()
         });
 
-        AnsiConsole.Write($"\nNew stack {name} was succesfully added! Press any key to continue...");
+        AnsiConsole.Markup($"\nNew stack [green]{name}[/] was succesfully added! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -60,13 +61,15 @@ internal class StacksController
             return;
         }
 
-        if (AnsiConsole.Confirm($"Are you sure you want to delete {stack.Name} stack and all associated flashcards?"))
+        if (!AnsiConsole.Confirm($"Are you sure you want to delete [green]{stack.Name}[/] stack and all associated flashcards?"))
         {
-            _stacksRepository.Delete(stack);
-
-            AnsiConsole.Write($"Stack {stack.Name} was succesfully deleted! Press any key to continue...");
-            Console.ReadKey();
+            return;
         }
+
+        _stacksRepository.Delete(stack);
+
+        AnsiConsole.Markup($"\nStack [green]{stack.Name}[/] was succesfully deleted! Press any key to continue...");
+        Console.ReadKey();
     }
 
     internal void Update()
@@ -78,21 +81,30 @@ internal class StacksController
             return;
         }
 
-        var name = UserInput.StringPrompt($"Enter a new name for the stack {stack.Name} (or press 0 to cancel):");
+        var name = UserInput.StringPrompt($"Enter a new name for the stack [blue]{stack.Name}[/] (or press 0 to cancel):");
+
+        while (_stacksRepository.StackNameExists(name.Trim()))
+        {
+            Console.Clear();
+            name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! \n\nEnter stack name (or press 0 to cancel):");
+        }
 
         if (name.Trim() == "0")
         {
             return;
         }
 
-        if (AnsiConsole.Confirm($"Are you sure you want to rename stack {stack.Name} to {name}?"))
+        Console.WriteLine();
+        if (!AnsiConsole.Confirm($"Are you sure you want to rename stack [blue]{stack.Name}[/] to [green]{name}[/]?"))
         {
-            stack.Name = name.Trim();
-            _stacksRepository.Update(stack);
-
-            AnsiConsole.Write($"\nStack was succesfully updated to {name}! Press any key to continue...");
-            Console.ReadKey();
+            return;
         }
+
+        stack.Name = name.Trim();
+        _stacksRepository.Update(stack);
+
+        AnsiConsole.Markup($"\nStack was succesfully updated to [green]{name}[/]! Press any key to continue...");
+        Console.ReadKey();
     }
 
     internal Stack Get(string prompt)
