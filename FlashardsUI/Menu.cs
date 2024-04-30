@@ -1,4 +1,5 @@
-﻿using FlashcardsLibrary.Repositories;
+﻿using FlashcardsLibrary.Models;
+using FlashcardsLibrary.Repositories;
 using Spectre.Console;
 using static FlashardsUI.Enums;
 
@@ -6,6 +7,7 @@ namespace FlashardsUI;
 internal class Menu
 {
     StacksController stacksController = new(new StacksRepository());
+    FlashcardsController flashcardsController = new(new  FlashcardsRepository());
 
     internal void MainMenu()
     {
@@ -23,14 +25,19 @@ internal class Menu
                     StacksMenu();
                     break;
                 case MainMenuOptions.ManageFlashcards:
-                    FlashcardsMenu();
+                    flashcardsController.CurrentStack = stacksController.Get("Select a stack of flashcards to manage:");
+                    if (flashcardsController.CurrentStack.Id == 0)
+                    {
+                        return;
+                    }
+                    FlashcardsMenu(flashcardsController.CurrentStack);
                     break;
                 case MainMenuOptions.StudySessions:
                     break;
                 case MainMenuOptions.CloseApplication:
                     if (AnsiConsole.Confirm("Are you sure you want to exit?"))
                     {
-                        Console.WriteLine("\nGoodbye!");
+                        AnsiConsole.WriteLine("\nGoodbye!");
                         exit = true;
                     }
                     else
@@ -73,7 +80,7 @@ internal class Menu
         }
     }
 
-    internal void FlashcardsMenu()
+    internal void FlashcardsMenu(Stack stack)
     {
         var exit = false;
 
@@ -81,17 +88,29 @@ internal class Menu
         {
             Console.Clear();
 
-            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>("Manage flashcards\nSelect from the options");
+            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>($"Manage flashcards from the {stack.Name} stack\nSelect from the options");
 
             switch (selection)
             {
+                case FlashcardsMenuOptions.ChangeStack:
+                    var newStack = stacksController.Get("Select a stack of flashcards to manage:");
+                    if (newStack.Id == 0)
+                    {
+                        continue;
+                    }
+                    stack = newStack;
+                    break;
                 case FlashcardsMenuOptions.ViewAllFlashcards:
+                    flashcardsController.GetAll();
                     break;
                 case FlashcardsMenuOptions.AddFlashcard:
+                    flashcardsController.Post();
                     break;
                 case FlashcardsMenuOptions.DeleteFlashcard:
+                    flashcardsController.Delete();
                     break;
                 case FlashcardsMenuOptions.UpdateFlashcard:
+                    flashcardsController.Update();
                     break;
                 case FlashcardsMenuOptions.MainMenu:
                     exit = true;

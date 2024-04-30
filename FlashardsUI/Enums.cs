@@ -20,6 +20,7 @@ internal class Enums
 
     public enum FlashcardsMenuOptions
     {
+        ChangeStack,
         ViewAllFlashcards,
         AddFlashcard,
         DeleteFlashcard,

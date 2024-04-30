@@ -10,4 +10,13 @@ internal static class Mapper
             Name = stack.Name
         };
     }
+
+    public static FlashcardDTO ToFlashcardDTO(this Flashcard flashcard)
+    {
+        return new FlashcardDTO
+        {
+            Question = flashcard.Question,
+            Answer = flashcard.Answer
+        };
+    }
 }

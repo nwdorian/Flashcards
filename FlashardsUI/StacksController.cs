@@ -17,9 +17,9 @@ internal class StacksController
 
         List<StackDTO> stackDTOs = new();
 
-        foreach (var stack in stacks)
+        foreach (var s in stacks)
         {
-            stackDTOs.Add(stack.ToStackDTO());
+            stackDTOs.Add(s.ToStackDTO());
         }
 
         TableVisualization.ShowStacksTable(stackDTOs);
@@ -53,16 +53,14 @@ internal class StacksController
 
     internal void Delete()
     {
-        var stacks = _stacksRepository.GetAll();
-
-        var stack = UserInput.StacksPrompt(stacks, "Select a stack you want to delete:");
+        var stack = Get("Select a stack to delete (or press 0 to cancel):");
 
         if (stack.Id == 0)
         {
             return;
         }
 
-        if (AnsiConsole.Confirm($"Are you sure you want to delete {stack.Name}?"))
+        if (AnsiConsole.Confirm($"Are you sure you want to delete {stack.Name} stack and all associated flashcards?"))
         {
             _stacksRepository.Delete(stack);
 
@@ -73,11 +71,7 @@ internal class StacksController
 
     internal void Update()
     {
-        var stacks = _stacksRepository.GetAll();
-
-        var stack = UserInput.StacksPrompt(stacks, "Select a stack you want to update:");
-
-        var oldName = stack.Name;
+        var stack = Get("Select a stack you want to update:");
 
         if (stack.Id == 0)
         {
@@ -91,13 +85,26 @@ internal class StacksController
             return;
         }
 
-        if (AnsiConsole.Confirm($"Are you sure you want to rename stack {oldName} to {name}?"))
+        if (AnsiConsole.Confirm($"Are you sure you want to rename stack {stack.Name} to {name}?"))
         {
             stack.Name = name.Trim();
             _stacksRepository.Update(stack);
 
-            AnsiConsole.Write($"\nStack {oldName} was succesfully updated to {name}! Press any key to continue...");
+            AnsiConsole.Write($"\nStack was succesfully updated to {name}! Press any key to continue...");
             Console.ReadKey();
         }
+    }
+
+    internal Stack Get(string prompt)
+    {
+        IEnumerable<Stack> stacks = _stacksRepository.GetAll();
+
+        return AnsiConsole.Prompt(
+            new SelectionPrompt<Stack>()
+            .Title(prompt)
+            .AddChoices(stacks)
+            .AddChoices(new Stack { Id = 0, Name = "Cancel and return to menu" })
+            .UseConverter(stack => stack.Name!)
+            );
     }
 }

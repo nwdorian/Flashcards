@@ -22,19 +22,6 @@ public class StacksRepository : IStacksRepository
             return connection.Query<Stack>(getAllSql);
         }
     }
-
-    public Stack? GetById(int id)
-    {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
-
-            var getByIdSql = "SELECT * FROM Stack WHERE Id = @Id";
-
-            return connection.QuerySingleOrDefault<Stack>(getByIdSql, new {Id = id});
-        }
-    }
-
     public void Add(Stack stack)
     {
         using (var connection = new SqlConnection(connectionString))

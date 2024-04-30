@@ -19,4 +19,20 @@ internal class TableVisualization
 
         AnsiConsole.Write(table);
     }
+
+    internal static void ShowFlashcardsTable(List<FlashcardDTO> tableDataDTO, string stackName)
+    {
+        var table = new Table();
+
+        table.Title = new TableTitle($"Flashcards Table for {stackName} stack", "bold");
+
+        table.AddColumns("Question", "Answer");
+
+        foreach (var flashcardDTO in tableDataDTO)
+        {
+            table.AddRow(flashcardDTO.Question!, flashcardDTO.Answer!);
+        }
+
+        AnsiConsole.Write(table);
+    }
 }

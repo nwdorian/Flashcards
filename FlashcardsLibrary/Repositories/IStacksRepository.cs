@@ -3,7 +3,6 @@
 namespace FlashcardsLibrary.Repositories;
 public interface IStacksRepository
 {
-    Stack? GetById(int id);
     IEnumerable<Stack> GetAll();
     void Add(Stack stack);
     void Update(Stack stack);

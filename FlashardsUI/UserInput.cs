@@ -17,15 +17,4 @@ internal class UserInput
                 .PageSize(10)
                 .AddChoices(Enum.GetValues(typeof(T)) as T[] ?? throw new InvalidOperationException("Failed to retrieve enum values!")));
     }
-
-    internal static Stack StacksPrompt(IEnumerable<Stack> stacks, string prompt)
-    {
-        return AnsiConsole.Prompt(
-            new SelectionPrompt<Stack>()
-            .Title(prompt)
-            .AddChoices(stacks)
-            .AddChoices(new Stack { Id = 0, Name = "Cancel and return to menu" })
-            .UseConverter(stack => stack.Name!)
-            );
-    }
 }

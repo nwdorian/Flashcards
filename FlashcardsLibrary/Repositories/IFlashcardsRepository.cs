@@ -1,11 +1,11 @@
 ﻿using FlashcardsLibrary.Models;
 
 namespace FlashcardsLibrary.Repositories;
-internal interface IFlashCardsRepository
+public interface IFlashCardsRepository
 {
-    Flashcard GetById(int id);
-    IEnumerable<Flashcard> GetAll();
+    IEnumerable<Flashcard> GetAll(Stack stack);
     void Add(Flashcard flashcard);
     void Update(Flashcard flashcard);
     void Delete(Flashcard flashcard);
+    bool FlashcardExists(string name);
 }
