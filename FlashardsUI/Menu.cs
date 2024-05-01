@@ -33,6 +33,7 @@ internal class Menu
                     FlashcardsMenu(flashcardsController.CurrentStack);
                     break;
                 case MainMenuOptions.StudySessions:
+                    StudySessionMenu();
                     break;
                 case MainMenuOptions.CloseApplication:
                     if (AnsiConsole.Confirm("Are you sure you want to exit?"))
@@ -113,6 +114,29 @@ internal class Menu
                     flashcardsController.Update();
                     break;
                 case FlashcardsMenuOptions.MainMenu:
+                    exit = true;
+                    break;
+            }
+        }
+    }
+
+    internal void StudySessionMenu()
+    {
+        var exit = false;
+
+        while (!exit)
+        {
+            Console.Clear();
+
+            var selection = UserInput.EnumPrompt<StudySessionMenuOptions>("Manage stacks of flashcards\nSelect from the options");
+
+            switch (selection)
+            {
+                case StudySessionMenuOptions.ViewAllSessions:
+                    break;
+                case StudySessionMenuOptions.StartStudySession:
+                    break;
+                case StudySessionMenuOptions.MainMenu:
                     exit = true;
                     break;
             }

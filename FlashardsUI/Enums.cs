@@ -27,4 +27,11 @@ internal class Enums
         UpdateFlashcard,
         MainMenu
     }
+
+    public enum StudySessionMenuOptions
+    {
+        ViewAllSessions,
+        StartStudySession,
+        MainMenu
+    }
 }
