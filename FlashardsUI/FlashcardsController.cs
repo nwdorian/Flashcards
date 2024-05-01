@@ -32,13 +32,15 @@ internal class FlashcardsController
 
     internal void Post()
     {
-        AnsiConsole.WriteLine($"Add new flashcard to the {CurrentStack.Name} stack");
+        AnsiConsole.MarkupLine($"Add new flashcard to the [blue]{CurrentStack.Name}[/] stack");
 
-        var question = UserInput.StringPrompt("Enter flashcard question:");
+        Console.WriteLine();
+        var question = UserInput.StringPrompt("Enter flashcard question (or press 0 to cancel):");
 
         while (_flashcardsRepository.FlashcardExists(question.Trim()))
         {
-            question = UserInput.StringPrompt($"Flashcard with the question {question} already exists! \n\nEnter question (or press 0 to cancel):");
+            Console.Clear();
+            question = UserInput.StringPrompt($"Flashcard with the question [red]{question}[/] already exists! \n\nEnter question (or press 0 to cancel):");
         }
 
         if (question.Trim() == "0")
@@ -46,9 +48,16 @@ internal class FlashcardsController
             return;
         }
 
-        var answer = UserInput.StringPrompt("Enter flashcard answer:");
+        Console.WriteLine();
+        var answer = UserInput.StringPrompt("Enter flashcard answer (or press 0 to cancel):");
 
-        if (!AnsiConsole.Confirm($"Are you sure you want to add a new flashcard to the {CurrentStack.Name} stack?"))
+        if (answer.Trim() == "0")
+        {
+            return;
+        }
+
+        Console.WriteLine();
+        if (!AnsiConsole.Confirm($"Are you sure you want to add a new flashcard to the [blue]{CurrentStack.Name}[/] stack?"))
         {
             return;
         }
@@ -73,14 +82,14 @@ internal class FlashcardsController
             return;
         }
 
-        if (!AnsiConsole.Confirm($"Are you sure you want to delete {flashcard.Question}?"))
+        if (!AnsiConsole.Confirm($"Are you sure you want to delete [green]{flashcard.Question}[/]?"))
         {
             return;
         }
 
         _flashcardsRepository.Delete(flashcard);
 
-        AnsiConsole.Write($"Flashcard {flashcard.Question} was succesfully deleted! Press any key to continue...");
+        AnsiConsole.Markup($"\nFlashcard [green]{flashcard.Question}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -93,11 +102,15 @@ internal class FlashcardsController
             return;
         }
 
-        var question = UserInput.StringPrompt("Enter flashcard question (or press 0 to cancel):");
+        AnsiConsole.Markup($"Editing flashcard \nQuestion: [green]{flashcard.Question}[/]\nAnswer: [green]{flashcard.Answer}[/]\n\n");
+
+        var question = UserInput.StringPromptAllowEmpty("Enter flashcard question (or press 0 to cancel):");
 
         while (_flashcardsRepository.FlashcardExists(question.Trim()))
         {
-            question = UserInput.StringPrompt($"Flashcard with the question {question} already exists! \n\nEnter question (or press 0 to cancel):");
+            Console.Clear();
+            AnsiConsole.Markup($"Editing flashcard \nQuestion: [green]{flashcard.Question}[/]\nAnswer: [green]{flashcard.Answer}[/]\n\n");
+            question = UserInput.StringPromptAllowEmpty($"Flashcard with the question [red]{question}[/] already exists! \n\nEnter flashcard question (or press 0 to cancel):");
         }
 
         if (question.Trim() == "0")
@@ -105,24 +118,33 @@ internal class FlashcardsController
             return;
         }
 
-        var answer = UserInput.StringPrompt("Enter flashcard answer (or press 0 to cancel):");
+        Console.WriteLine();
+        var answer = UserInput.StringPromptAllowEmpty("Enter flashcard answer (or press 0 to cancel):");
 
         if (answer.Trim() == "0")
         {
             return;
         }
 
+        Console.WriteLine();
         if (!AnsiConsole.Confirm($"Are you sure you want to apply flashcard changes?"))
         {
             return;
         }
 
-        flashcard.Question = question;
-        flashcard.Answer = answer;
+        if (question != "")
+        {
+            flashcard.Question = question;
+        }
+
+        if (answer != "")
+        {
+            flashcard.Answer = answer;
+        }
 
         _flashcardsRepository.Update(flashcard);
 
-        AnsiConsole.Write($"Flashcard was succesfully updated! Press any key to continue...");
+        AnsiConsole.Write($"\nFlashcard was succesfully updated! Press any key to continue...");
         Console.ReadKey();
     }
 

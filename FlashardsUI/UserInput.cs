@@ -9,6 +9,13 @@ internal class UserInput
         return AnsiConsole.Ask<string>(prompt);
     }
 
+    internal static string StringPromptAllowEmpty(string prompt)
+    {
+        return AnsiConsole.Prompt(
+            new TextPrompt<string>(prompt)
+            .AllowEmpty());
+    }
+
     internal static T EnumPrompt<T>(string title) where T : notnull
     {
         return AnsiConsole.Prompt(
