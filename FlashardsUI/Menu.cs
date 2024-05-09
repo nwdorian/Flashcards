@@ -8,6 +8,10 @@ internal class Menu
 {
     StacksController stacksController = new(new StacksRepository());
     FlashcardsController flashcardsController = new(new  FlashcardsRepository());
+    StudySessionsController studySessionsController = new(
+        new StudySessionsRepository(),
+        new StacksRepository(),
+        new FlashcardsRepository());
 
     internal void MainMenu()
     {
@@ -128,13 +132,15 @@ internal class Menu
         {
             Console.Clear();
 
-            var selection = UserInput.EnumPrompt<StudySessionMenuOptions>("Manage stacks of flashcards\nSelect from the options");
+            var selection = UserInput.EnumPrompt<StudySessionMenuOptions>("Select from the options");
 
             switch (selection)
             {
                 case StudySessionMenuOptions.ViewAllSessions:
+                    studySessionsController.GetAll();
                     break;
                 case StudySessionMenuOptions.StartStudySession:
+                    studySessionsController.Post();
                     break;
                 case StudySessionMenuOptions.MainMenu:
                     exit = true;

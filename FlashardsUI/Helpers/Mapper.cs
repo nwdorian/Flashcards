@@ -19,4 +19,14 @@ internal static class Mapper
             Answer = flashcard.Answer
         };
     }
+
+    public static StudySessionDTO ToStudySessionDTO(this StudySession studysession)
+    {
+        return new StudySessionDTO
+        {
+            Name = studysession.Stack.Name,
+            Date = studysession.Date,
+            Score = studysession.Score
+        };
+    }
 }

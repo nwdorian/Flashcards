@@ -35,4 +35,20 @@ internal class TableVisualization
 
         AnsiConsole.Write(table);
     }
+
+    internal static void ShowStudySessionsTable(IEnumerable<StudySessionDTO> tableDataDTO)
+    {
+        var table = new Table();
+
+        table.Title = new TableTitle("Study sessions table", "bold");
+
+        table.AddColumns("Stack", "Date", "Score");
+
+        foreach (var sessionDTO in tableDataDTO)
+        {
+            table.AddRow(sessionDTO.Name.ToString(), sessionDTO.Date.ToString("g"), sessionDTO.Score.ToString());
+        }
+
+        AnsiConsole.Write(table);
+    }
 }
