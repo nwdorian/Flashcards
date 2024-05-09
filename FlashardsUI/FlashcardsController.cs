@@ -66,7 +66,7 @@ internal class FlashcardsController
             Answer = answer
         });
 
-        AnsiConsole.Write($"New flashcard was succesfully added! Press any key to continue...");
+        AnsiConsole.Write($"\nNew flashcard was succesfully added! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -86,7 +86,7 @@ internal class FlashcardsController
 
         _flashcardsRepository.Delete(flashcard);
 
-        AnsiConsole.Markup($"Flashcard [green]{flashcard.Question}[/] was succesfully deleted! Press any key to continue...");
+        AnsiConsole.Markup($"\nFlashcard [green]{flashcard.Question}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 

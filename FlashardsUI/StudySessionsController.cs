@@ -34,7 +34,7 @@ internal class StudySessionsController
 
     internal void Post()
     {
-        var stack = GetStack("Select which stack you want to study: ");
+        var stack = GetStack("Select a stack to study: ");
 
         if (stack.Id == 0)
         {
@@ -45,7 +45,7 @@ internal class StudySessionsController
 
         if(!flashcards.Any())
         {
-            AnsiConsole.Markup($"The stack [red]{stack.Name}[/] doesn't contain any flashcards yet. Press any key to continue...");
+            AnsiConsole.Markup($"The stack [red]{stack.Name}[/] doesn't contain any flashcards. Press any key to continue...");
             Console.ReadKey();
             return;
         }

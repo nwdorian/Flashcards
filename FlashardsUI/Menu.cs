@@ -7,7 +7,7 @@ namespace FlashardsUI;
 internal class Menu
 {
     StacksController stacksController = new(new StacksRepository());
-    FlashcardsController flashcardsController = new(new  FlashcardsRepository());
+    FlashcardsController flashcardsController = new(new FlashcardsRepository());
     StudySessionsController studySessionsController = new(
         new StudySessionsRepository(),
         new StacksRepository(),
@@ -21,7 +21,12 @@ internal class Menu
         {
             AnsiConsole.Clear();
 
-            var selection = UserInput.EnumPrompt<MainMenuOptions>("Welcome to flashcards application!\nWhat would you like to do?");
+            AnsiConsole.Write(
+                new FigletText("Flashcards")
+                    .LeftJustified()
+                    .Color(Color.Red));
+            
+            var selection = UserInput.EnumPrompt<MainMenuOptions>("Select from the menu:");
 
             switch (selection)
             {
@@ -29,10 +34,11 @@ internal class Menu
                     StacksMenu();
                     break;
                 case MainMenuOptions.ManageFlashcards:
-                    flashcardsController.CurrentStack = stacksController.Get("Select a stack of flashcards to manage:");
+                    Console.Clear();
+                    flashcardsController.CurrentStack = stacksController.Get("Select a stack of flashcards:");
                     if (flashcardsController.CurrentStack.Id == 0)
                     {
-                        return;
+                        continue;
                     }
                     FlashcardsMenu(flashcardsController.CurrentStack);
                     break;
@@ -93,12 +99,12 @@ internal class Menu
         {
             Console.Clear();
 
-            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>($"Manage flashcards from the {stack.Name} stack\nSelect from the options");
+            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>($"Manage flashcards from the [blue]{stack.Name}[/] stack\nSelect from the options");
 
             switch (selection)
             {
                 case FlashcardsMenuOptions.ChangeStack:
-                    var newStack = stacksController.Get("Select a stack of flashcards to manage:");
+                    var newStack = stacksController.Get("Select a stack of flashcards:");
                     if (newStack.Id == 0)
                     {
                         continue;

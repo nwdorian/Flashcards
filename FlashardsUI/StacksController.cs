@@ -48,13 +48,13 @@ internal class StacksController
             Name = name.Trim()
         });
 
-        AnsiConsole.Markup($"New stack [green]{name}[/] was succesfully added! Press any key to continue...");
+        AnsiConsole.Markup($"\nNew stack [green]{name}[/] was succesfully added! Press any key to continue...");
         Console.ReadKey();
     }
 
     internal void Delete()
     {
-        var stack = Get("Select a stack to delete (or press 0 to cancel):");
+        var stack = Get("Select a stack to delete:");
 
         if (stack.Id == 0)
         {
@@ -68,13 +68,13 @@ internal class StacksController
 
         _stacksRepository.Delete(stack);
 
-        AnsiConsole.Markup($"Stack [green]{stack.Name}[/] was succesfully deleted! Press any key to continue...");
+        AnsiConsole.Markup($"\nStack [green]{stack.Name}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 
     internal void Update()
     {
-        var stack = Get("Select a stack you want to update:");
+        var stack = Get("Select a stack to update:");
 
         if (stack.Id == 0)
         {
@@ -102,7 +102,7 @@ internal class StacksController
         stack.Name = name.Trim();
         _stacksRepository.Update(stack);
 
-        AnsiConsole.Markup($"Stack was succesfully updated to [green]{name}[/]! Press any key to continue...");
+        AnsiConsole.Markup($"\nStack was succesfully updated to [green]{name}[/]! Press any key to continue...");
         Console.ReadKey();
     }
 
