@@ -16,7 +16,7 @@ public class FlashcardsRepository : IFlashCardsRepository
         {
             connection.Open();
 
-            var getAllSql = "SELECT * FROM Flashcard WHERE StackId = @StackId";
+            var getAllSql = "SELECT Id, StackId, Question, Answer FROM Flashcard WHERE StackId = @StackId";
 
             return connection.Query<Flashcard>(getAllSql, new { StackId = stack.Id});
         }

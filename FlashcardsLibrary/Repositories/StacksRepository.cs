@@ -17,7 +17,7 @@ public class StacksRepository : IStacksRepository
         {
             connection.Open();
 
-            var getAllSql = "SELECT * FROM Stack";
+            var getAllSql = "SELECT Id, Name FROM Stack";
 
             return connection.Query<Stack>(getAllSql);
         }
