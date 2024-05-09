@@ -34,7 +34,6 @@ internal class FlashcardsController
     {
         AnsiConsole.MarkupLine($"Add new flashcard to the [blue]{CurrentStack.Name}[/] stack");
 
-        Console.WriteLine();
         var question = UserInput.StringPrompt("Enter flashcard question (or press 0 to cancel):");
 
         while (_flashcardsRepository.FlashcardExists(question.Trim()))
@@ -48,7 +47,6 @@ internal class FlashcardsController
             return;
         }
 
-        Console.WriteLine();
         var answer = UserInput.StringPrompt("Enter flashcard answer (or press 0 to cancel):");
 
         if (answer.Trim() == "0")
@@ -56,7 +54,6 @@ internal class FlashcardsController
             return;
         }
 
-        Console.WriteLine();
         if (!AnsiConsole.Confirm($"Are you sure you want to add a new flashcard to the [blue]{CurrentStack.Name}[/] stack?"))
         {
             return;
@@ -69,7 +66,7 @@ internal class FlashcardsController
             Answer = answer
         });
 
-        AnsiConsole.Write($"\nNew flashcard was succesfully added! Press any key to continue...");
+        AnsiConsole.Write($"New flashcard was succesfully added! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -89,7 +86,7 @@ internal class FlashcardsController
 
         _flashcardsRepository.Delete(flashcard);
 
-        AnsiConsole.Markup($"\nFlashcard [green]{flashcard.Question}[/] was succesfully deleted! Press any key to continue...");
+        AnsiConsole.Markup($"Flashcard [green]{flashcard.Question}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -110,7 +107,7 @@ internal class FlashcardsController
         {
             Console.Clear();
             AnsiConsole.Markup($"Editing flashcard \nQuestion: [green]{flashcard.Question}[/]\nAnswer: [green]{flashcard.Answer}[/]\n\n");
-            question = UserInput.StringPromptAllowEmpty($"Flashcard with the question [red]{question}[/] already exists! \n\nEnter flashcard question (or press 0 to cancel):");
+            question = UserInput.StringPromptAllowEmpty($"Flashcard with the question [red]{question}[/] already exists! Enter flashcard question (leave empty to skip):");
         }
 
         if (question.Trim() == "0")
@@ -118,7 +115,6 @@ internal class FlashcardsController
             return;
         }
 
-        Console.WriteLine();
         var answer = UserInput.StringPromptAllowEmpty("Enter flashcard answer (or press 0 to cancel):");
 
         if (answer.Trim() == "0")
@@ -126,7 +122,6 @@ internal class FlashcardsController
             return;
         }
 
-        Console.WriteLine();
         if (!AnsiConsole.Confirm($"Are you sure you want to apply flashcard changes?"))
         {
             return;
@@ -136,7 +131,6 @@ internal class FlashcardsController
         {
             flashcard.Question = question;
         }
-
         if (answer != "")
         {
             flashcard.Answer = answer;

@@ -35,7 +35,7 @@ internal class StacksController
         while (_stacksRepository.StackNameExists(name.Trim()))
         {
             Console.Clear();
-            name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! \n\nEnter stack name (or press 0 to cancel):");
+            name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! Enter stack name (or press 0 to cancel):");
         }
 
         if (name.Trim() == "0")
@@ -48,7 +48,7 @@ internal class StacksController
             Name = name.Trim()
         });
 
-        AnsiConsole.Markup($"\nNew stack [green]{name}[/] was succesfully added! Press any key to continue...");
+        AnsiConsole.Markup($"New stack [green]{name}[/] was succesfully added! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -68,7 +68,7 @@ internal class StacksController
 
         _stacksRepository.Delete(stack);
 
-        AnsiConsole.Markup($"\nStack [green]{stack.Name}[/] was succesfully deleted! Press any key to continue...");
+        AnsiConsole.Markup($"Stack [green]{stack.Name}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 
@@ -86,7 +86,7 @@ internal class StacksController
         while (_stacksRepository.StackNameExists(name.Trim()))
         {
             Console.Clear();
-            name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! \n\nEnter stack name (or press 0 to cancel):");
+            name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! Enter stack name (or press 0 to cancel):");
         }
 
         if (name.Trim() == "0")
@@ -94,7 +94,6 @@ internal class StacksController
             return;
         }
 
-        Console.WriteLine();
         if (!AnsiConsole.Confirm($"Are you sure you want to rename stack [blue]{stack.Name}[/] to [green]{name}[/]?"))
         {
             return;
@@ -103,7 +102,7 @@ internal class StacksController
         stack.Name = name.Trim();
         _stacksRepository.Update(stack);
 
-        AnsiConsole.Markup($"\nStack was succesfully updated to [green]{name}[/]! Press any key to continue...");
+        AnsiConsole.Markup($"Stack was succesfully updated to [green]{name}[/]! Press any key to continue...");
         Console.ReadKey();
     }
 
