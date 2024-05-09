@@ -50,8 +50,8 @@ public class DatabaseManager
                                                    WHERE  NAME = 'Stack')
                                       CREATE TABLE Stack
                                         (
-                                           id   INT PRIMARY KEY IDENTITY(1, 1),
-                                           NAME NVARCHAR(100) NOT NULL
+                                           Id   INT PRIMARY KEY IDENTITY(1, 1),
+                                           Name NVARCHAR(100) NOT NULL
                                         );
 
                                     IF NOT EXISTS (SELECT NAME
@@ -59,10 +59,10 @@ public class DatabaseManager
                                                    WHERE  NAME = 'Flashcard')
                                       CREATE TABLE Flashcard
                                         (
-                                           id       INT PRIMARY KEY IDENTITY(1, 1),
-                                           stackid  INT FOREIGN KEY REFERENCES stack(id) ON DELETE CASCADE,
-                                           question NVARCHAR(100) NOT NULL,
-                                           answer   NVARCHAR(100) NOT NULL
+                                           Id       INT PRIMARY KEY IDENTITY(1, 1),
+                                           Stackid  INT FOREIGN KEY REFERENCES stack(id) ON DELETE CASCADE,
+                                           Question NVARCHAR(100) NOT NULL,
+                                           Answer   NVARCHAR(100) NOT NULL
                                         );
 
                                     IF NOT EXISTS (SELECT NAME
@@ -70,10 +70,10 @@ public class DatabaseManager
                                                    WHERE  NAME = 'StudySession')
                                       CREATE TABLE Studysession
                                         (
-                                           id      INT PRIMARY KEY IDENTITY(1, 1),
-                                           stackid INT FOREIGN KEY REFERENCES stack(id) ON DELETE CASCADE,
-                                           date    DATETIME NOT NULL,
-                                           score   INT NOT NULL
+                                           Id      INT PRIMARY KEY IDENTITY(1, 1),
+                                           Stackid INT FOREIGN KEY REFERENCES stack(id) ON DELETE CASCADE,
+                                           Date    DATETIME NOT NULL,
+                                           Score   INT NOT NULL
                                         )
                                     """;
                 connection.Execute(createTablesSql);
