@@ -40,7 +40,7 @@ internal class Menu
                     {
                         continue;
                     }
-                    FlashcardsMenu(flashcardsController.CurrentStack);
+                    FlashcardsMenu();
                     break;
                 case MainMenuOptions.StudySessions:
                     StudySessionMenu();
@@ -91,7 +91,7 @@ internal class Menu
         }
     }
 
-    internal void FlashcardsMenu(Stack stack)
+    internal void FlashcardsMenu()
     {
         var exit = false;
 
@@ -99,17 +99,17 @@ internal class Menu
         {
             Console.Clear();
 
-            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>($"Manage flashcards from the [blue]{stack.Name}[/] stack\nSelect from the options");
+            var selection = UserInput.EnumPrompt<FlashcardsMenuOptions>($"Manage flashcards from the [blue]{flashcardsController.CurrentStack.Name}[/] stack\nSelect from the options");
 
             switch (selection)
             {
                 case FlashcardsMenuOptions.ChangeStack:
-                    var newStack = stacksController.Get("Select a stack of flashcards:");
-                    if (newStack.Id == 0)
+                    var stack = stacksController.Get("Select a stack of flashcards:");
+                    if (stack.Id == 0)
                     {
                         continue;
                     }
-                    stack = newStack;
+                    flashcardsController.CurrentStack = stack;
                     break;
                 case FlashcardsMenuOptions.ViewAllFlashcards:
                     flashcardsController.GetAll();
