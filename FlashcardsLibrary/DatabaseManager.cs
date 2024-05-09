@@ -21,8 +21,12 @@ public class DatabaseManager
             using (var connection = new SqlConnection(connectionStringDb))
             {
                 connection.Open();
-                var createDatabaseSql = @"IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'FlashcardsDb')
-                                            CREATE DATABASE FlashcardsDb";
+                var createDatabaseSql = """
+                                        IF NOT EXISTS(SELECT *
+                                                    FROM   sys.databases
+                                                    WHERE  NAME = 'FlashcardsDb')
+                                        CREATE DATABASE FlashcardsDb
+                                        """;
                 connection.Execute(createDatabaseSql);
             }
         }
@@ -40,27 +44,39 @@ public class DatabaseManager
             using (var connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                var createStackSql = @"IF NOT EXISTS (SELECT name FROM sys.tables WHERE name = 'Stack')
-                                            CREATE TABLE Stack(
-                                            Id      INT PRIMARY KEY IDENTITY(1,1),
-                                            Name    NVARCHAR(100) NOT NULL)";
-                connection.Execute(createStackSql);
+                var createTablesSql = """
+                                     IF NOT EXISTS (SELECT NAME
+                                                   FROM   sys.tables
+                                                   WHERE  NAME = 'Stack')
+                                      CREATE TABLE Stack
+                                        (
+                                           id   INT PRIMARY KEY IDENTITY(1, 1),
+                                           NAME NVARCHAR(100) NOT NULL
+                                        );
 
-                var createFlashcardSql = @"IF NOT EXISTS (SELECT name FROM sys.tables WHERE name = 'Flashcard')
-                                            CREATE TABLE Flashcard(
-                                            Id          INT PRIMARY KEY IDENTITY(1,1),
-                                            StackId     INT FOREIGN KEY REFERENCES Stack(Id) ON DELETE CASCADE,
-                                            Question    NVARCHAR(100) NOT NULL,
-                                            Answer      NVARCHAR(100) NOT NULL)";
-                connection.Execute(createFlashcardSql);
+                                    IF NOT EXISTS (SELECT NAME
+                                                   FROM   sys.tables
+                                                   WHERE  NAME = 'Flashcard')
+                                      CREATE TABLE Flashcard
+                                        (
+                                           id       INT PRIMARY KEY IDENTITY(1, 1),
+                                           stackid  INT FOREIGN KEY REFERENCES stack(id) ON DELETE CASCADE,
+                                           question NVARCHAR(100) NOT NULL,
+                                           answer   NVARCHAR(100) NOT NULL
+                                        );
 
-                var createStudySessionSql = @"IF NOT EXISTS (SELECT name FROM sys.tables WHERE name = 'StudySession')
-                                            CREATE TABLE StudySession(
-                                            Id          INT PRIMARY KEY IDENTITY(1,1),
-                                            StackId     INT FOREIGN KEY REFERENCES Stack(Id) ON DELETE CASCADE,
-                                            Date        DATETIME NOT NULL,
-                                            Score       INT NOT NULL)";
-                connection.Execute(createStudySessionSql);
+                                    IF NOT EXISTS (SELECT NAME
+                                                   FROM   sys.tables
+                                                   WHERE  NAME = 'StudySession')
+                                      CREATE TABLE Studysession
+                                        (
+                                           id      INT PRIMARY KEY IDENTITY(1, 1),
+                                           stackid INT FOREIGN KEY REFERENCES stack(id) ON DELETE CASCADE,
+                                           date    DATETIME NOT NULL,
+                                           score   INT NOT NULL
+                                        )
+                                    """;
+                connection.Execute(createTablesSql);
             }
         }
         catch (Exception e)
