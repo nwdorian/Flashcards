@@ -30,10 +30,10 @@ internal class Menu
 
             switch (selection)
             {
-                case MainMenuOptions.ManageStacks:
+                case MainMenuOptions.Stacks:
                     StacksMenu();
                     break;
-                case MainMenuOptions.ManageFlashcards:
+                case MainMenuOptions.Flashcards:
                     Console.Clear();
                     flashcardsController.CurrentStack = stacksController.Get("Select a stack of flashcards:");
                     if (flashcardsController.CurrentStack.Id == 0)
@@ -45,7 +45,7 @@ internal class Menu
                 case MainMenuOptions.StudySessions:
                     StudySessionMenu();
                     break;
-                case MainMenuOptions.CloseApplication:
+                case MainMenuOptions.Exit:
                     if (AnsiConsole.Confirm("Are you sure you want to exit?"))
                     {
                         AnsiConsole.WriteLine("\nGoodbye!");

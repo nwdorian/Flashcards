@@ -1,5 +1,4 @@
-﻿using FlashcardsLibrary.Models;
-using Spectre.Console;
+﻿using Spectre.Console;
 
 namespace FlashardsUI;
 internal class UserInput

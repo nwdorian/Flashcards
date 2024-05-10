@@ -3,10 +3,10 @@ internal class Enums
 {
     public enum MainMenuOptions
     {
-        ManageStacks,
-        ManageFlashcards,
+        Stacks,
+        Flashcards,
         StudySessions,
-        CloseApplication
+        Exit
     }
 
     public enum StacksMenuOptions
