@@ -2,8 +2,7 @@
 using FlashcardsLibrary;
 
 var database = new DatabaseManager();
-database.CreateDatabase();
-database.CreateTables();
+database.InitDatabase();
 
 var menu = new Menu();
 menu.MainMenu();
