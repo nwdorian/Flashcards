@@ -3,9 +3,9 @@
 namespace FlashcardsLibrary.Repositories;
 public interface IFlashCardsRepository
 {
-    IEnumerable<Flashcard> GetAll(Stack stack);
-    void Add(Flashcard flashcard);
-    void Update(Flashcard flashcard);
-    void Delete(Flashcard flashcard);
-    bool FlashcardExists(string name);
+    Task<IEnumerable<Flashcard>> GetAllAsync(Stack stack);
+    Task AddAsync(Flashcard flashcard);
+    Task UpdateAsync(Flashcard flashcard);
+    Task DeleteAsync(Flashcard flashcard);
+    Task<bool> FlashcardExistsAsync(string name);
 }

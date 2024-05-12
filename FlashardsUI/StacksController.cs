@@ -11,9 +11,9 @@ internal class StacksController
     {
         _stacksRepository = stacksRepository;
     }
-    internal void GetAll()
+    internal async Task GetAll()
     {
-        IEnumerable<Stack> stacks = _stacksRepository.GetAll();
+        IEnumerable<Stack> stacks = await _stacksRepository.GetAllAsync();
 
         List<StackDTO> stackDTOs = new();
 
@@ -28,11 +28,11 @@ internal class StacksController
         Console.ReadKey();
     }
 
-    internal void Post()
+    internal async Task Post()
     {
         var name = UserInput.StringPrompt("Please enter the stack name (or press 0 to cancel):");
 
-        while (_stacksRepository.StackNameExists(name.Trim()))
+        while (await _stacksRepository.StackNameExistsAsync(name.Trim()))
         {
             Console.Clear();
             name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! Enter stack name (or press 0 to cancel):");
@@ -43,7 +43,7 @@ internal class StacksController
             return;
         }
 
-        _stacksRepository.Add(new Stack
+        await _stacksRepository.AddAsync(new Stack
         {
             Name = name.Trim()
         });
@@ -52,9 +52,9 @@ internal class StacksController
         Console.ReadKey();
     }
 
-    internal void Delete()
+    internal async Task Delete()
     {
-        var stack = Get("Select a stack to delete:");
+        var stack = await Get("Select a stack to delete:");
 
         if (stack.Id == 0)
         {
@@ -66,15 +66,15 @@ internal class StacksController
             return;
         }
 
-        _stacksRepository.Delete(stack);
+        await _stacksRepository.DeleteAsync(stack);
 
         AnsiConsole.Markup($"\nStack [green]{stack.Name}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 
-    internal void Update()
+    internal async Task Update()
     {
-        var stack = Get("Select a stack to update:");
+        var stack = await Get("Select a stack to update:");
 
         if (stack.Id == 0)
         {
@@ -83,7 +83,7 @@ internal class StacksController
 
         var name = UserInput.StringPrompt($"Enter a new name for the stack [blue]{stack.Name}[/] (or press 0 to cancel):");
 
-        while (_stacksRepository.StackNameExists(name.Trim()))
+        while (await _stacksRepository.StackNameExistsAsync(name.Trim()))
         {
             Console.Clear();
             name = UserInput.StringPrompt($"Stack with the name [red]{name}[/] already exists! Enter stack name (or press 0 to cancel):");
@@ -100,15 +100,15 @@ internal class StacksController
         }
 
         stack.Name = name.Trim();
-        _stacksRepository.Update(stack);
+        await _stacksRepository.UpdateAsync(stack);
 
         AnsiConsole.Markup($"\nStack was succesfully updated to [green]{name}[/]! Press any key to continue...");
         Console.ReadKey();
     }
 
-    internal Stack Get(string prompt)
+    internal async Task<Stack> Get(string prompt)
     {
-        IEnumerable<Stack> stacks = _stacksRepository.GetAll();
+        IEnumerable<Stack> stacks = await _stacksRepository.GetAllAsync();
 
         return AnsiConsole.Prompt(
             new SelectionPrompt<Stack>()

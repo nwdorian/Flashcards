@@ -11,62 +11,57 @@ public class StacksRepository : IStacksRepository
     {
         connectionString = AppConfig.GetFullConnectionString();
     }
-    public IEnumerable<Stack> GetAll()
+    public async Task<IEnumerable<Stack>> GetAllAsync()
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var getAllSql = "SELECT Id, Name FROM Stack";
+        connection.Open();
 
-            return connection.Query<Stack>(getAllSql);
-        }
+        var getAllSql = "SELECT Id, Name FROM Stack";
+
+        return await connection.QueryAsync<Stack>(getAllSql);
     }
-    public void Add(Stack stack)
+    public async Task AddAsync(Stack stack)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var insertSql = "INSERT INTO Stack (Name) VALUES (@Name)";
+        connection.Open();
 
-            connection.Execute(insertSql, stack);
-        }
+        var insertSql = "INSERT INTO Stack (Name) VALUES (@Name)";
+
+        await connection.ExecuteAsync(insertSql, stack);
     }
 
-    public void Delete(Stack stack)
+    public async Task DeleteAsync(Stack stack)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var deleteSql = "DELETE FROM Stack WHERE Id = @Id";
+        connection.Open();
 
-            connection.Execute(deleteSql, stack);
-        }
+        var deleteSql = "DELETE FROM Stack WHERE Id = @Id";
+
+        await connection.ExecuteAsync(deleteSql, stack);
     }
 
-    public void Update(Stack stack)
+    public async Task UpdateAsync(Stack stack)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var updateSQL = "UPDATE Stack SET Name = @Name WHERE Id = @Id";
+        connection.Open();
 
-            connection.Execute(updateSQL, stack);
-        }
+        var updateSQL = "UPDATE Stack SET Name = @Name WHERE Id = @Id";
+
+        await connection.ExecuteAsync(updateSQL, stack);
     }
 
-    public bool StackNameExists(string name)
+    public async Task<bool> StackNameExistsAsync(string name)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var checkNameSql = "SELECT TOP 1 COUNT(*) FROM Stack WHERE Name = @Name";
+        connection.Open();
 
-            return connection.ExecuteScalar<bool>(checkNameSql, new { Name = name });
-        }
+        var checkNameSql = "SELECT TOP 1 COUNT(*) FROM Stack WHERE Name = @Name";
+
+        return await connection.ExecuteScalarAsync<bool>(checkNameSql, new { Name = name });
     }
 }

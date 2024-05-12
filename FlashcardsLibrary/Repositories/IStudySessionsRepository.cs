@@ -3,6 +3,6 @@
 namespace FlashcardsLibrary.Repositories;
 public interface IStudySessionsRepository
 {
-    IEnumerable<StudySession> GetAll();
-    void Add(StudySession session);
+    Task<IEnumerable<StudySession>> GetAllAsync();
+    Task AddAsync(StudySession session);
 }

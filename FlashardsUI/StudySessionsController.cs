@@ -15,9 +15,9 @@ internal class StudySessionsController
         _stacksRepository = stacksRepository;
         _flashCardsRepository = flashcardsRepository;
     }
-    internal void GetAll()
+    internal async Task GetAll()
     {
-        var studySessions = _studySessionsRepository.GetAll();
+        var studySessions = await _studySessionsRepository.GetAllAsync();
 
         List<StudySessionDTO> studySessionDTOs = new();
 
@@ -32,16 +32,16 @@ internal class StudySessionsController
         Console.ReadKey();
     }
 
-    internal void Post()
+    internal async Task Post()
     {
-        var stack = GetStack("Select a stack to study: ");
+        var stack = await GetStack("Select a stack to study: ");
 
         if (stack.Id == 0)
         {
             return;
         }
 
-        var flashcards = _flashCardsRepository.GetAll(stack);
+        var flashcards = await _flashCardsRepository.GetAllAsync(stack);
 
         if(!flashcards.Any())
         {
@@ -77,7 +77,7 @@ internal class StudySessionsController
         }
         var date = DateTime.Now;
 
-        _studySessionsRepository.Add(new StudySession
+        await _studySessionsRepository.AddAsync(new StudySession
         {
             StackId = stack.Id,
             Date = date,
@@ -90,9 +90,9 @@ internal class StudySessionsController
         Console.ReadLine();
     }
 
-    internal Stack GetStack(string prompt)
+    internal async Task<Stack> GetStack(string prompt)
     {
-        IEnumerable<Stack> stacks = _stacksRepository.GetAll();
+        IEnumerable<Stack> stacks = await _stacksRepository.GetAllAsync();
 
         return AnsiConsole.Prompt(
             new SelectionPrompt<Stack>()

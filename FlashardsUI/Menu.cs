@@ -13,7 +13,7 @@ internal class Menu
         new StacksRepository(),
         new FlashcardsRepository());
 
-    internal void MainMenu()
+    internal async Task MainMenu()
     {
         var exit = false;
 
@@ -31,19 +31,19 @@ internal class Menu
             switch (selection)
             {
                 case MainMenuOptions.Stacks:
-                    StacksMenu();
+                    await StacksMenu();
                     break;
                 case MainMenuOptions.Flashcards:
                     Console.Clear();
-                    flashcardsController.CurrentStack = stacksController.Get("Select a stack of flashcards:");
+                    flashcardsController.CurrentStack = await stacksController.Get("Select a stack of flashcards:");
                     if (flashcardsController.CurrentStack.Id == 0)
                     {
                         continue;
                     }
-                    FlashcardsMenu();
+                    await FlashcardsMenu();
                     break;
                 case MainMenuOptions.StudySessions:
-                    StudySessionMenu();
+                    await StudySessionMenu();
                     break;
                 case MainMenuOptions.Exit:
                     if (AnsiConsole.Confirm("Are you sure you want to exit?"))
@@ -60,7 +60,7 @@ internal class Menu
         }
     }
 
-    internal void StacksMenu()
+    internal async Task StacksMenu()
     {
         var exit = false;
 
@@ -73,16 +73,16 @@ internal class Menu
             switch (selection)
             {
                 case StacksMenuOptions.ViewAllStacks:
-                    stacksController.GetAll();
+                    await stacksController.GetAll();
                     break;
                 case StacksMenuOptions.AddStack:
-                    stacksController.Post();
+                    await stacksController.Post();
                     break;
                 case StacksMenuOptions.DeleteStack:
-                    stacksController.Delete();
+                    await stacksController.Delete();
                     break;
                 case StacksMenuOptions.UpdateStack:
-                    stacksController.Update();
+                    await stacksController.Update();
                     break;
                 case StacksMenuOptions.MainMenu:
                     exit = true;
@@ -91,7 +91,7 @@ internal class Menu
         }
     }
 
-    internal void FlashcardsMenu()
+    internal async Task FlashcardsMenu()
     {
         var exit = false;
 
@@ -104,7 +104,7 @@ internal class Menu
             switch (selection)
             {
                 case FlashcardsMenuOptions.ChangeStack:
-                    var stack = stacksController.Get("Select a stack of flashcards:");
+                    var stack = await stacksController.Get("Select a stack of flashcards:");
                     if (stack.Id == 0)
                     {
                         continue;
@@ -112,16 +112,16 @@ internal class Menu
                     flashcardsController.CurrentStack = stack;
                     break;
                 case FlashcardsMenuOptions.ViewAllFlashcards:
-                    flashcardsController.GetAll();
+                    await flashcardsController.GetAll();
                     break;
                 case FlashcardsMenuOptions.AddFlashcard:
-                    flashcardsController.Post();
+                    await flashcardsController.Post();
                     break;
                 case FlashcardsMenuOptions.DeleteFlashcard:
-                    flashcardsController.Delete();
+                    await flashcardsController.Delete();
                     break;
                 case FlashcardsMenuOptions.UpdateFlashcard:
-                    flashcardsController.Update();
+                    await flashcardsController.Update();
                     break;
                 case FlashcardsMenuOptions.MainMenu:
                     exit = true;
@@ -130,7 +130,7 @@ internal class Menu
         }
     }
 
-    internal void StudySessionMenu()
+    internal async Task StudySessionMenu()
     {
         var exit = false;
 
@@ -143,10 +143,10 @@ internal class Menu
             switch (selection)
             {
                 case StudySessionMenuOptions.ViewAllSessions:
-                    studySessionsController.GetAll();
+                    await studySessionsController.GetAll();
                     break;
                 case StudySessionMenuOptions.StartStudySession:
-                    studySessionsController.Post();
+                    await studySessionsController.Post();
                     break;
                 case StudySessionMenuOptions.MainMenu:
                     exit = true;

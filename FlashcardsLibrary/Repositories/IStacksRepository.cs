@@ -3,9 +3,9 @@
 namespace FlashcardsLibrary.Repositories;
 public interface IStacksRepository
 {
-    IEnumerable<Stack> GetAll();
-    void Add(Stack stack);
-    void Update(Stack stack);
-    void Delete(Stack stack);
-    bool StackNameExists(string name);
+    Task<IEnumerable<Stack>> GetAllAsync();
+    Task AddAsync(Stack stack);
+    Task UpdateAsync(Stack stack);
+    Task DeleteAsync(Stack stack);
+    Task<bool> StackNameExistsAsync(string name);
 }

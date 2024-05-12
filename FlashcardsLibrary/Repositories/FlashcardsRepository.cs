@@ -10,63 +10,58 @@ public class FlashcardsRepository : IFlashCardsRepository
     {
         connectionString = AppConfig.GetFullConnectionString();
     }
-    public IEnumerable<Flashcard> GetAll(Stack stack)
+    public async Task<IEnumerable<Flashcard>> GetAllAsync(Stack stack)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var getAllSql = "SELECT Id, StackId, Question, Answer FROM Flashcard WHERE StackId = @StackId";
+        connection.Open();
 
-            return connection.Query<Flashcard>(getAllSql, new { StackId = stack.Id});
-        }
+        var getAllSql = "SELECT Id, StackId, Question, Answer FROM Flashcard WHERE StackId = @StackId";
+
+        return await connection.QueryAsync<Flashcard>(getAllSql, new { StackId = stack.Id });
     }
 
-    public void Add(Flashcard flashcard)
+    public async Task AddAsync(Flashcard flashcard)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var insertSql = "INSERT INTO Flashcard (StackId, Question, Answer) VALUES (@StackId, @Question, @Answer)";
+        connection.Open();
 
-            connection.Execute(insertSql, flashcard);
-        }
+        var insertSql = "INSERT INTO Flashcard (StackId, Question, Answer) VALUES (@StackId, @Question, @Answer)";
+
+        await connection.ExecuteAsync(insertSql, flashcard);
     }
 
-    public void Delete(Flashcard flashcard)
+    public async Task DeleteAsync(Flashcard flashcard)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var deleteSql = "DELETE FROM Flashcard WHERE Id = @Id";
+        connection.Open();
 
-            connection.Execute(deleteSql, flashcard);
-        }
+        var deleteSql = "DELETE FROM Flashcard WHERE Id = @Id";
+
+        await connection.ExecuteAsync(deleteSql, flashcard);
     }
 
-    public void Update(Flashcard flashcard)
+    public async Task UpdateAsync(Flashcard flashcard)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var updateSql = "UPDATE Flashcard SET StackId = @StackId, Question = @Question, Answer = @Answer WHERE Id = @Id";
+        connection.Open();
 
-            connection.Execute(updateSql, flashcard);
-        }
+        var updateSql = "UPDATE Flashcard SET StackId = @StackId, Question = @Question, Answer = @Answer WHERE Id = @Id";
+
+        await connection.ExecuteAsync(updateSql, flashcard);
     }
 
-    public bool FlashcardExists(string question)
+    public async Task<bool> FlashcardExistsAsync(string question)
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            connection.Open();
+        using var connection = new SqlConnection(connectionString);
 
-            var checkNameSql = "SELECT TOP 1 COUNT(*) FROM Flashcard WHERE Question = @Question";
+        connection.Open();
 
-            return connection.ExecuteScalar<bool>(checkNameSql, new { Question = question });
-        }
+        var checkNameSql = "SELECT TOP 1 COUNT(*) FROM Flashcard WHERE Question = @Question";
+
+        return await connection.ExecuteScalarAsync<bool>(checkNameSql, new { Question = question });
     }
 }

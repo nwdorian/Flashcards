@@ -13,9 +13,9 @@ internal class FlashcardsController
     }
     public Stack? CurrentStack { get; set; }
 
-    internal void GetAll()
+    internal async Task GetAll()
     {
-        var flashcards = _flashcardsRepository.GetAll(CurrentStack);
+        var flashcards = await _flashcardsRepository.GetAllAsync(CurrentStack);
 
         List<FlashcardDTO> flashcardDTOs = new();
 
@@ -30,13 +30,13 @@ internal class FlashcardsController
         Console.ReadKey();
     }
 
-    internal void Post()
+    internal async Task Post()
     {
         AnsiConsole.MarkupLine($"Add new flashcard to the [blue]{CurrentStack.Name}[/] stack");
 
         var question = UserInput.StringPrompt("Enter flashcard question (or press 0 to cancel):");
 
-        while (_flashcardsRepository.FlashcardExists(question.Trim()))
+        while (await _flashcardsRepository.FlashcardExistsAsync(question.Trim()))
         {
             Console.Clear();
             question = UserInput.StringPrompt($"Flashcard with the question [red]{question}[/] already exists! \n\nEnter question (or press 0 to cancel):");
@@ -59,7 +59,7 @@ internal class FlashcardsController
             return;
         }
 
-        _flashcardsRepository.Add(new Flashcard
+        await _flashcardsRepository.AddAsync(new Flashcard
         {
             StackId = CurrentStack.Id,
             Question = question,
@@ -70,9 +70,9 @@ internal class FlashcardsController
         Console.ReadKey();
     }
 
-    internal void Delete()
+    internal async Task Delete()
     {
-        var flashcard = Get("Select a flashcard to delete:");
+        var flashcard = await Get("Select a flashcard to delete:");
 
         if (flashcard.Id == 0)
         {
@@ -84,15 +84,15 @@ internal class FlashcardsController
             return;
         }
 
-        _flashcardsRepository.Delete(flashcard);
+        await _flashcardsRepository.DeleteAsync(flashcard);
 
         AnsiConsole.Markup($"\nFlashcard [green]{flashcard.Question}[/] was succesfully deleted! Press any key to continue...");
         Console.ReadKey();
     }
 
-    internal void Update()
+    internal async Task Update()
     {
-        var flashcard = Get("Select a flashcard to update:");
+        var flashcard = await Get("Select a flashcard to update:");
 
         if (flashcard.Id == 0)
         {
@@ -103,7 +103,7 @@ internal class FlashcardsController
 
         var question = UserInput.StringPromptAllowEmpty("Enter flashcard question (or press 0 to cancel):");
 
-        while (_flashcardsRepository.FlashcardExists(question.Trim()))
+        while (await _flashcardsRepository.FlashcardExistsAsync(question.Trim()))
         {
             Console.Clear();
             AnsiConsole.Markup($"Editing flashcard \nQuestion: [green]{flashcard.Question}[/]\nAnswer: [green]{flashcard.Answer}[/]\n\n");
@@ -136,15 +136,15 @@ internal class FlashcardsController
             flashcard.Answer = answer;
         }
 
-        _flashcardsRepository.Update(flashcard);
+        await _flashcardsRepository.UpdateAsync(flashcard);
 
         AnsiConsole.Write($"\nFlashcard was succesfully updated! Press any key to continue...");
         Console.ReadKey();
     }
 
-    internal Flashcard Get(string prompt)
+    internal async Task<Flashcard> Get(string prompt)
     {
-        IEnumerable<Flashcard> flashcards = _flashcardsRepository.GetAll(CurrentStack);
+        IEnumerable<Flashcard> flashcards = await _flashcardsRepository.GetAllAsync(CurrentStack);
 
         return AnsiConsole.Prompt(
             new SelectionPrompt<Flashcard>()

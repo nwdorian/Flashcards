@@ -11,32 +11,30 @@ public class StudySessionsRepository : IStudySessionsRepository
     {
         connectionString = AppConfig.GetFullConnectionString();
     }
-    public IEnumerable<StudySession> GetAll()
+    public async Task<IEnumerable<StudySession>> GetAllAsync()
     {
-        using (var connection = new SqlConnection(connectionString))
-        {
-            var getAllSql = """
+        using var connection = new SqlConnection(connectionString);
+
+        var getAllSql = """
                             SELECT ss.id, ss.date, ss.score, ss.stackid, s.name
                             FROM   studysession AS ss
                                    JOIN stack AS s
                                      ON ss.stackid = s.id
                             """;
 
-            return connection.Query<StudySession, Stack, StudySession>(getAllSql, (studysession, stack) =>
-            {
-                studysession.Stack = stack;
-                return studysession;
-            }, 
-            splitOn: "StackId");
-        }
-    }
-    public void Add(StudySession session)
-    {
-        using (var connection = new SqlConnection(connectionString))
+        return await connection.QueryAsync<StudySession, Stack, StudySession>(getAllSql, (studysession, stack) =>
         {
-            var insertSql = "INSERT INTO StudySession (StackId, Date, Score) VALUES (@StackId, @Date, @Score)";
+            studysession.Stack = stack;
+            return studysession;
+        },
+        splitOn: "StackId");
+    }
+    public async Task AddAsync(StudySession session)
+    {
+        using var connection = new SqlConnection(connectionString);
 
-            connection.Execute(insertSql, session);
-        }
+        var insertSql = "INSERT INTO StudySession (StackId, Date, Score) VALUES (@StackId, @Date, @Score)";
+
+        await connection.ExecuteAsync(insertSql, session);
     }
 }
