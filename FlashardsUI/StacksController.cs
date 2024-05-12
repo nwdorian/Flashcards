@@ -61,7 +61,7 @@ internal class StacksController
             return;
         }
 
-        if (!AnsiConsole.Confirm($"Are you sure you want to delete [green]{stack.Name}[/] stack and all associated flashcards?"))
+        if (!AnsiConsole.Confirm($"Are you sure you want to delete [green]{stack.Name}[/] stack ? \nThis will delete all associated flashcards and study sessions!"))
         {
             return;
         }
